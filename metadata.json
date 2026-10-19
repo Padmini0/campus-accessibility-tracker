@@ -1,0 +1,8 @@
+{
+  "name": "Remix Campus Accessibility Issue Tracker",
+  "description": "JKLU campus accessibility issue reporting, tracking, and resolution verification system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
