@@ -77,13 +77,15 @@ export const MyIssuesPage: React.FC<MyIssuesPageProps> = ({ onNavigate }) => {
           </p>
         </div>
 
-        <button
-          onClick={() => onNavigate('report-issue')}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-xs shadow-xs transition-colors shrink-0"
-        >
-          <PlusCircle className="w-4 h-4" />
-          <span>+ Report New Issue</span>
-        </button>
+        <div className="flex items-center gap-2.5 shrink-0">
+          <button
+            onClick={() => onNavigate('report-issue')}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-xs shadow-xs transition-colors"
+          >
+            <PlusCircle className="w-4 h-4" />
+            <span>+ Report New Issue</span>
+          </button>
+        </div>
       </div>
 
       {/* Filter and Search Bar */}

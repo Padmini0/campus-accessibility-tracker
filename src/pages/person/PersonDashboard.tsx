@@ -215,10 +215,10 @@ export const PersonDashboard: React.FC<PersonDashboardProps> = ({ onNavigate }) 
           </div>
         </div>
         <button
-          onClick={() => onNavigate('issue-history')}
+          onClick={() => onNavigate('my-issues')}
           className="text-xs font-semibold text-blue-700 hover:underline shrink-0"
         >
-          View Activity History →
+          View My Issues →
         </button>
       </div>
     </div>

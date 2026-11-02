@@ -19,33 +19,34 @@ interface LoginPageProps {
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess }) => {
   const { login } = useAuth();
-  const [email, setEmail] = useState('student@jklu.edu.in');
-  const [password, setPassword] = useState('••••••••');
   const [selectedRole, setSelectedRole] = useState<UserRole>('PERSON');
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [department, setDepartment] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
+
+    if (!email.trim() || !email.includes('@')) {
+      setErrorMessage('Please enter a valid institutional email address.');
+      return;
+    }
+
+    if (!password.trim() || password.length < 4) {
+      setErrorMessage('Password must be at least 4 characters long.');
+      return;
+    }
+
     setIsSubmitting(true);
     setTimeout(() => {
-      login(selectedRole, email);
+      login(selectedRole, email.trim(), fullName.trim() || undefined, department.trim() || undefined);
       setIsSubmitting(false);
       onSuccess();
     }, 250);
-  };
-
-  const handleDemoLogin = (role: UserRole) => {
-    setSelectedRole(role);
-    if (role === 'PERSON') setEmail('student@jklu.edu.in');
-    if (role === 'STAFF') setEmail('staff@jklu.edu.in');
-    if (role === 'ADMIN') setEmail('admin@jklu.edu.in');
-
-    setIsSubmitting(true);
-    setTimeout(() => {
-      login(role);
-      setIsSubmitting(false);
-      onSuccess();
-    }, 200);
   };
 
   return (
@@ -110,15 +111,21 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess }) => {
           </div>
         </div>
 
-        {/* Right Side: Login Form & Presentation Fast-Logins */}
+        {/* Right Side: Login Form */}
         <div className="md:col-span-6 p-8 sm:p-10 flex flex-col justify-between bg-white">
           <div>
             <div className="mb-6">
               <h3 className="text-xl font-bold text-slate-900">Sign in to Portal</h3>
               <p className="text-xs text-slate-500 mt-1">
-                Enter your institutional @jklu.edu.in credentials or choose a quick role below.
+                Enter your institutional @jklu.edu.in credentials to access your account.
               </p>
             </div>
+
+            {errorMessage && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg">
+                {errorMessage}
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Role Selector Tabs */}
@@ -129,10 +136,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess }) => {
                 <div className="grid grid-cols-3 gap-2">
                   <button
                     type="button"
-                    onClick={() => {
-                      setSelectedRole('PERSON');
-                      setEmail('student@jklu.edu.in');
-                    }}
+                    onClick={() => setSelectedRole('PERSON')}
                     className={`py-2 px-2 text-xs font-semibold rounded-lg border flex flex-col items-center gap-1 transition-all ${
                       selectedRole === 'PERSON'
                         ? 'bg-emerald-50 border-emerald-500 text-emerald-800 shadow-xs'
@@ -145,10 +149,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess }) => {
 
                   <button
                     type="button"
-                    onClick={() => {
-                      setSelectedRole('STAFF');
-                      setEmail('staff@jklu.edu.in');
-                    }}
+                    onClick={() => setSelectedRole('STAFF')}
                     className={`py-2 px-2 text-xs font-semibold rounded-lg border flex flex-col items-center gap-1 transition-all ${
                       selectedRole === 'STAFF'
                         ? 'bg-blue-50 border-blue-500 text-blue-800 shadow-xs'
@@ -161,10 +162,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess }) => {
 
                   <button
                     type="button"
-                    onClick={() => {
-                      setSelectedRole('ADMIN');
-                      setEmail('admin@jklu.edu.in');
-                    }}
+                    onClick={() => setSelectedRole('ADMIN')}
                     className={`py-2 px-2 text-xs font-semibold rounded-lg border flex flex-col items-center gap-1 transition-all ${
                       selectedRole === 'ADMIN'
                         ? 'bg-purple-50 border-purple-500 text-purple-800 shadow-xs'
@@ -177,15 +175,31 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess }) => {
                 </div>
               </div>
 
+              {/* Full Name (Optional) */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                  Institutional Email (@jklu.edu.in)
+                  Full Name (Optional)
+                </label>
+                <input
+                  id="login-name"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="e.g. Your Full Name"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 font-medium"
+                />
+              </div>
+
+              {/* Institutional Email */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Institutional Email (@jklu.edu.in) <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                   <input
                     id="login-email"
-                    type="text"
+                    type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -195,9 +209,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess }) => {
                 </div>
               </div>
 
+              {/* Password */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                  Password
+                  Password <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -207,59 +222,43 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    placeholder="Enter your password"
                     className="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 font-medium"
                   />
                 </div>
+              </div>
+
+              {/* Department (Optional) */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Department / Branch (Optional)
+                </label>
+                <input
+                  id="login-department"
+                  type="text"
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  placeholder={
+                    selectedRole === 'PERSON'
+                      ? 'e.g. Computer Science & Engineering'
+                      : selectedRole === 'STAFF'
+                      ? 'e.g. Maintenance / Electrical'
+                      : 'e.g. Administration'
+                  }
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 font-medium"
+                />
               </div>
 
               <button
                 id="login-submit-button"
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2"
+                className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2 mt-2"
               >
                 <span>{isSubmitting ? 'Authenticating...' : 'Sign In'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
-
-            {/* Quick Demo Logins */}
-            <div className="mt-6 pt-5 border-t border-slate-200">
-              <span className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 text-center">
-                Instant Quick Logins
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <button
-                  id="demo-login-student"
-                  type="button"
-                  onClick={() => handleDemoLogin('PERSON')}
-                  className="px-2.5 py-2 text-xs font-medium bg-slate-50 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-300 text-slate-700 border border-slate-200 rounded-lg transition-colors text-left"
-                >
-                  <span className="block font-bold text-emerald-700">Student</span>
-                  <span className="text-[10px] text-slate-500 truncate block">Nandini Mittal</span>
-                </button>
-
-                <button
-                  id="demo-login-staff"
-                  type="button"
-                  onClick={() => handleDemoLogin('STAFF')}
-                  className="px-2.5 py-2 text-xs font-medium bg-slate-50 hover:bg-blue-50 hover:text-blue-800 hover:border-blue-300 text-slate-700 border border-slate-200 rounded-lg transition-colors text-left"
-                >
-                  <span className="block font-bold text-blue-700">Staff</span>
-                  <span className="text-[10px] text-slate-500 truncate block">Rajesh Kumar</span>
-                </button>
-
-                <button
-                  id="demo-login-admin"
-                  type="button"
-                  onClick={() => handleDemoLogin('ADMIN')}
-                  className="px-2.5 py-2 text-xs font-medium bg-slate-50 hover:bg-purple-50 hover:text-purple-800 hover:border-purple-300 text-slate-700 border border-slate-200 rounded-lg transition-colors text-left"
-                >
-                  <span className="block font-bold text-purple-700">Admin</span>
-                  <span className="text-[10px] text-slate-500 truncate block">Dr. Suresh Rao</span>
-                </button>
-              </div>
-            </div>
           </div>
 
           <p className="text-[11px] text-slate-400 text-center mt-6">
@@ -270,3 +269,4 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess }) => {
     </div>
   );
 };
+

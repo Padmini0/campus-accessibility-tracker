@@ -6,7 +6,6 @@ import {
   LayoutDashboard,
   PlusCircle,
   ListTodo,
-  History,
   User,
   LogOut,
   ClipboardList,
@@ -15,7 +14,6 @@ import {
   Sparkles,
   ShieldCheck,
   BarChart3,
-  Database,
   X,
 } from 'lucide-react';
 
@@ -132,17 +130,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </span>
                 )}
               </button>
-
-              <button
-                id="nav-issue-history"
-                onClick={() => handleNavClick('issue-history')}
-                className={navItemClass('issue-history')}
-              >
-                <div className="flex items-center gap-3">
-                  <History className="w-4 h-4 text-slate-500" />
-                  <span>Issue History</span>
-                </div>
-              </button>
             </>
           )}
 
@@ -177,17 +164,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     {staffAssignedCount}
                   </span>
                 )}
-              </button>
-
-              <button
-                id="nav-issue-history"
-                onClick={() => handleNavClick('issue-history')}
-                className={navItemClass('issue-history')}
-              >
-                <div className="flex items-center gap-3">
-                  <History className="w-4 h-4 text-slate-500" />
-                  <span>Issue History</span>
-                </div>
               </button>
             </>
           )}
@@ -284,17 +260,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <div className="flex items-center gap-3">
                   <BarChart3 className="w-4 h-4 text-slate-500" />
                   <span>Reports & Stats</span>
-                </div>
-              </button>
-
-              <button
-                id="nav-issue-history"
-                onClick={() => handleNavClick('issue-history')}
-                className={navItemClass('issue-history')}
-              >
-                <div className="flex items-center gap-3">
-                  <History className="w-4 h-4 text-slate-500" />
-                  <span>Audit History</span>
                 </div>
               </button>
             </>

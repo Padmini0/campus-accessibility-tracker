@@ -77,7 +77,17 @@ interface DataContextType {
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'jklu_campus_access_v2';
+const STORAGE_KEY = 'jklu_campus_access_clean_v1';
+
+// One-time cleanup of legacy keys containing dummy issues
+try {
+  localStorage.removeItem('jklu_campus_access_v2_issues');
+  localStorage.removeItem('jklu_campus_access_v2_history');
+  localStorage.removeItem('jklu_campus_access_v2_verifications');
+  localStorage.removeItem('jklu_campus_access_v2');
+} catch {
+  // ignore
+}
 
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [issues, setIssues] = useState<IssueEntity[]>(() => {
@@ -110,7 +120,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [locations] = useState<LocationEntity[]>(INITIAL_LOCATIONS);
   const [features] = useState<AccessibilityFeatureEntity[]>(INITIAL_FEATURES);
   const [staff] = useState<StaffEntity[]>(INITIAL_STAFF);
-  const [people] = useState<PersonEntity[]>(INITIAL_PEOPLE);
+  const [people, setPeople] = useState<PersonEntity[]>(INITIAL_PEOPLE);
   const [admin] = useState<AdminEntity>(INITIAL_ADMIN);
   const [priorities] = useState<PriorityEntity[]>(INITIAL_PRIORITIES);
 
@@ -139,11 +149,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [verifications]);
 
   const reportIssue = (input: ReportIssueInput): IssueEntity => {
-    // Generate next issue ID
+    // Generate next issue ID starting from ISS-1001
     const maxNum = issues.reduce((max, item) => {
       const num = parseInt(item.issue_id.replace('ISS-', ''), 10);
       return !isNaN(num) && num > max ? num : max;
-    }, 1026);
+    }, 1000);
     const newIssueId = `ISS-${maxNum + 1}`;
 
     const now = new Date();
@@ -167,7 +177,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const historyMax = history.reduce((max, item) => {
       const num = parseInt(item.history_id.replace('HIS-', ''), 10);
       return !isNaN(num) && num > max ? num : max;
-    }, 12);
+    }, 0);
     const newHistoryId = `HIS-${(historyMax + 1).toString().padStart(3, '0')}`;
 
     const reporter = people.find((p) => p.person_id === input.reporter_id);
@@ -207,7 +217,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const historyMax = history.reduce((max, item) => {
       const num = parseInt(item.history_id.replace('HIS-', ''), 10);
       return !isNaN(num) && num > max ? num : max;
-    }, 12);
+    }, 0);
     const newHistoryId = `HIS-${(historyMax + 1).toString().padStart(3, '0')}`;
 
     const newHistoryRecord: IssueHistoryEntity = {
@@ -253,7 +263,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const historyMax = history.reduce((max, item) => {
       const num = parseInt(item.history_id.replace('HIS-', ''), 10);
       return !isNaN(num) && num > max ? num : max;
-    }, 12);
+    }, 0);
     const newHistoryId = `HIS-${(historyMax + 1).toString().padStart(3, '0')}`;
 
     const newHistoryRecord: IssueHistoryEntity = {
@@ -302,7 +312,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const verMax = verifications.reduce((max, item) => {
       const num = parseInt(item.verification_id.replace('VER-', ''), 10);
       return !isNaN(num) && num > max ? num : max;
-    }, 2);
+    }, 0);
     const newVerId = `VER-${(verMax + 1).toString().padStart(3, '0')}`;
 
     const newVerRecord: VerificationEntity = {
@@ -322,7 +332,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const historyMax = history.reduce((max, item) => {
       const num = parseInt(item.history_id.replace('HIS-', ''), 10);
       return !isNaN(num) && num > max ? num : max;
-    }, 12);
+    }, 0);
     const newHistoryId = `HIS-${(historyMax + 1).toString().padStart(3, '0')}`;
 
     const adminUser = admin;
@@ -369,10 +379,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem(`${STORAGE_KEY}_issues`);
     localStorage.removeItem(`${STORAGE_KEY}_history`);
     localStorage.removeItem(`${STORAGE_KEY}_verifications`);
-    setIssues(INITIAL_ISSUES);
-    setHistory(INITIAL_HISTORY);
-    setVerifications(INITIAL_VERIFICATIONS);
-    showToast('Database reset to original seed data state.', 'info');
+    setIssues([]);
+    setHistory([]);
+    setVerifications([]);
+    showToast('Database reset to clean state (0 issues).', 'info');
   };
 
   // Relational Lookups

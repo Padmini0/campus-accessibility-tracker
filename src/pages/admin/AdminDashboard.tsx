@@ -287,23 +287,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
           </div>
 
           <div className="space-y-2 pt-1">
-            {(Object.entries(categoryCounts) as [string, number][])
-              .sort((a, b) => b[1] - a[1])
-              .slice(0, 4)
-              .map(([catKey, count]) => {
-                const pct = totalIssues > 0 ? Math.round((count / totalIssues) * 100) : 0;
-                return (
-                  <div key={catKey} className="text-xs">
-                    <div className="flex justify-between text-slate-700 font-medium mb-1">
-                      <span className="truncate max-w-[170px]">{catKey}</span>
-                      <span className="font-bold text-slate-900">{count}</span>
+            {Object.keys(categoryCounts).length === 0 ? (
+              <p className="text-xs text-slate-400 italic py-2 text-center">No reported issues yet</p>
+            ) : (
+              (Object.entries(categoryCounts) as [string, number][])
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 4)
+                .map(([catKey, count]) => {
+                  const pct = totalIssues > 0 ? Math.round((count / totalIssues) * 100) : 0;
+                  return (
+                    <div key={catKey} className="text-xs">
+                      <div className="flex justify-between text-slate-700 font-medium mb-1">
+                        <span className="truncate max-w-[170px]">{catKey}</span>
+                        <span className="font-bold text-slate-900">{count}</span>
+                      </div>
+                      <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                        <div className="h-full rounded-full bg-indigo-600" style={{ width: `${pct}%` }} />
+                      </div>
                     </div>
-                    <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                      <div className="h-full rounded-full bg-indigo-600" style={{ width: `${pct}%` }} />
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+            )}
           </div>
         </div>
       </div>
@@ -328,20 +332,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
           </button>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
-                <th className="py-3 px-4">Issue ID</th>
-                <th className="py-3 px-4">Category & Title</th>
-                <th className="py-3 px-4">Location</th>
-                <th className="py-3 px-4">Priority</th>
-                <th className="py-3 px-4">Assigned Staff</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4">Date</th>
-                <th className="py-3 px-4 text-right">Actions</th>
-              </tr>
-            </thead>
+        {issues.length === 0 ? (
+          <div className="p-12 text-center text-slate-500">
+            <CheckCircle2 className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+            <p className="font-bold text-slate-800">No issues reported yet</p>
+            <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+              There are currently no accessibility tickets in the system.
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
+                  <th className="py-3 px-4">Issue ID</th>
+                  <th className="py-3 px-4">Category & Title</th>
+                  <th className="py-3 px-4">Location</th>
+                  <th className="py-3 px-4">Priority</th>
+                  <th className="py-3 px-4">Assigned Staff</th>
+                  <th className="py-3 px-4">Status</th>
+                  <th className="py-3 px-4">Date</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
             <tbody className="divide-y divide-slate-200 text-slate-700">
               {issues.slice(0, 6).map((issue) => {
                 const location = getLocationById(issue.location_id);
@@ -421,6 +434,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
             </tbody>
           </table>
         </div>
+      )}
       </div>
 
       {/* Modals */}

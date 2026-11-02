@@ -19,7 +19,6 @@ import { VerificationPage } from './pages/admin/VerificationPage';
 import { LocationsPage } from './pages/admin/LocationsPage';
 import { FeaturesPage } from './pages/admin/FeaturesPage';
 import { ReportsPage } from './pages/admin/ReportsPage';
-import { IssueHistoryPage } from './pages/shared/IssueHistoryPage';
 import { IssueDetailsPage } from './pages/shared/IssueDetailsPage';
 import { ProfilePage } from './pages/shared/ProfilePage';
 
@@ -79,9 +78,6 @@ const AppContent: React.FC = () => {
     }
     if (currentPage === 'accessibility-features') {
       return <FeaturesPage onNavigate={handleNavigate} />;
-    }
-    if (currentPage === 'issue-history') {
-      return <IssueHistoryPage onNavigate={handleNavigate} />;
     }
     if (currentPage === 'profile') {
       return <ProfilePage />;

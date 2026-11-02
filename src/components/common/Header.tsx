@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
-import { UserRole } from '../../types';
 import { JKLULogo } from './JKLULogo';
 import {
   Bell,
   Menu,
-  RotateCcw,
   User,
   Shield,
   Briefcase,
   GraduationCap,
   ChevronDown,
-  Check,
+  LogOut,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -22,9 +20,8 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, onNavigate }) => {
-  const { role, switchRole, currentUser, logout } = useAuth();
-  const { resetDatabase, issues, verifications } = useData();
-  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const { role, currentUser, logout } = useAuth();
+  const { issues, verifications } = useData();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
@@ -32,12 +29,6 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, onNavigate }) =
   const pendingVerifications = verifications.filter((v) => v.verification_status === 'PENDING').length;
   const criticalCount = issues.filter((i) => i.priority === 'CRITICAL' && i.status !== 'RESOLVED').length;
 
-  const handleRoleChange = (newRole: UserRole) => {
-    switchRole(newRole);
-    setShowRoleDropdown(false);
-    // Navigate to respective dashboard
-    onNavigate('dashboard');
-  };
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200/90 shadow-2xs">
@@ -77,109 +68,27 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, onNavigate }) =
 
         {/* Right Controls */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Quick Role Switcher Pill (Crucial for Viva Presentation) */}
-          <div className="relative">
-            <button
-              id="role-switcher-button"
-              type="button"
-              onClick={() => {
-                setShowRoleDropdown(!showRoleDropdown);
-                setShowNotifications(false);
-                setShowProfileMenu(false);
-              }}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-medium text-slate-800 transition-colors"
-              title="Switch demo role for presentation"
-            >
-              <span className="text-slate-400 font-normal hidden lg:inline">Active Role:</span>
-              {role === 'ADMIN' && (
-                <span className="inline-flex items-center gap-1 font-bold text-purple-700">
-                  <Shield className="w-3.5 h-3.5" /> Admin
-                </span>
-              )}
-              {role === 'STAFF' && (
-                <span className="inline-flex items-center gap-1 font-bold text-blue-700">
-                  <Briefcase className="w-3.5 h-3.5" /> Staff
-                </span>
-              )}
-              {role === 'PERSON' && (
-                <span className="inline-flex items-center gap-1 font-bold text-emerald-700">
-                  <GraduationCap className="w-3.5 h-3.5" /> Student
-                </span>
-              )}
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-            </button>
-
-            {showRoleDropdown && (
-              <div className="absolute right-0 mt-1.5 w-60 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs animate-fadeIn">
-                <div className="px-3 py-1.5 border-b border-slate-100">
-                  <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
-                    Switch User Role (Viva Demo)
-                  </span>
-                </div>
-                <button
-                  onClick={() => handleRoleChange('PERSON')}
-                  className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-slate-50 text-slate-800"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
-                      S
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-900">Student (Nandini Mittal)</p>
-                      <p className="text-[10px] text-slate-400">PERSON • Report & track issues</p>
-                    </div>
-                  </div>
-                  {role === 'PERSON' && <Check className="w-4 h-4 text-emerald-600" />}
-                </button>
-
-                <button
-                  onClick={() => handleRoleChange('STAFF')}
-                  className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-slate-50 text-slate-800"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
-                      M
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-900">Staff (Rajesh Kumar)</p>
-                      <p className="text-[10px] text-slate-400">STAFF • Update status & remarks</p>
-                    </div>
-                  </div>
-                  {role === 'STAFF' && <Check className="w-4 h-4 text-blue-600" />}
-                </button>
-
-                <button
-                  onClick={() => handleRoleChange('ADMIN')}
-                  className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-slate-50 text-slate-800"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
-                      A
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-900">Admin (Dr. Suresh Rao)</p>
-                      <p className="text-[10px] text-slate-400">ADMIN • Assign, verify & reports</p>
-                    </div>
-                  </div>
-                  {role === 'ADMIN' && <Check className="w-4 h-4 text-purple-600" />}
-                </button>
-              </div>
+          {/* Active Role Indicator Badge */}
+          <div className="flex items-center">
+            {role === 'ADMIN' && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-purple-200 bg-purple-50 text-xs font-bold text-purple-700">
+                <Shield className="w-3.5 h-3.5" />
+                <span>Admin</span>
+              </span>
+            )}
+            {role === 'STAFF' && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-blue-200 bg-blue-50 text-xs font-bold text-blue-700">
+                <Briefcase className="w-3.5 h-3.5" />
+                <span>Staff</span>
+              </span>
+            )}
+            {role === 'PERSON' && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-emerald-200 bg-emerald-50 text-xs font-bold text-emerald-700">
+                <GraduationCap className="w-3.5 h-3.5" />
+                <span>Student</span>
+              </span>
             )}
           </div>
-
-          {/* Reset Database Button */}
-          <button
-            type="button"
-            onClick={() => {
-              if (window.confirm('Reset database to default JKLU seed records? Any demo additions will be reset.')) {
-                resetDatabase();
-              }
-            }}
-            className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
-            title="Reset system to clean seed data"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
 
           {/* Notifications */}
           <div className="relative">
@@ -188,7 +97,6 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, onNavigate }) =
               type="button"
               onClick={() => {
                 setShowNotifications(!showNotifications);
-                setShowRoleDropdown(false);
                 setShowProfileMenu(false);
               }}
               className="relative p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
@@ -237,7 +145,6 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, onNavigate }) =
               type="button"
               onClick={() => {
                 setShowProfileMenu(!showProfileMenu);
-                setShowRoleDropdown(false);
                 setShowNotifications(false);
               }}
               className="flex items-center gap-2 pl-2 pr-1 py-1 rounded-lg hover:bg-slate-100 transition-colors"
@@ -279,7 +186,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, onNavigate }) =
                   }}
                   className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-red-50 text-red-600 border-t border-slate-100"
                 >
-                  <RotateCcw className="w-4 h-4 text-red-500" />
+                  <LogOut className="w-4 h-4 text-red-500" />
                   <span>Sign Out</span>
                 </button>
               </div>

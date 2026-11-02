@@ -15,6 +15,7 @@ import {
   User,
   ArrowUpDown,
   Download,
+  CheckCircle2,
 } from 'lucide-react';
 
 interface AdminAllIssuesPageProps {
@@ -196,9 +197,21 @@ export const AdminAllIssuesPage: React.FC<AdminAllIssuesPageProps> = ({ onNaviga
         </div>
       </div>
 
-      {/* Issues Table (Desktop) */}
-      <div className="hidden md:block bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden">
-        <table className="w-full text-left text-xs border-collapse">
+      {/* Issues Table (Desktop) & Cards (Mobile) */}
+      {filteredIssues.length === 0 ? (
+        <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-12 text-center text-slate-500">
+          <CheckCircle2 className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+          <p className="font-bold text-slate-800">No issues found</p>
+          <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+            {issues.length === 0
+              ? 'There are currently no accessibility tickets reported in the campus database.'
+              : 'No tickets match the selected filters or search terms.'}
+          </p>
+        </div>
+      ) : (
+        <>
+          <div className="hidden md:block bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden">
+            <table className="w-full text-left text-xs border-collapse">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
               <th className="py-3 px-3.5">Issue ID</th>
@@ -352,6 +365,8 @@ export const AdminAllIssuesPage: React.FC<AdminAllIssuesPageProps> = ({ onNaviga
           );
         })}
       </div>
+      </>
+    )}
 
       {/* Modals */}
       <UpdateStatusModal
