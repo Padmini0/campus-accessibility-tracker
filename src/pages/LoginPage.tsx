@@ -1,0 +1,237 @@
+import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { UserRole } from '../types';
+import { JKLULogo } from '../components/common/JKLULogo';
+import {
+  Lock,
+  Mail,
+  GraduationCap,
+  Briefcase,
+  Shield,
+  ArrowRight,
+  Building2,
+  CheckCircle2,
+} from 'lucide-react';
+
+interface LoginPageProps {
+  onSuccess: () => void;
+}
+
+export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess }) => {
+  const { login, role } = useAuth();
+  const [selectedRole, setSelectedRole] = useState<UserRole>('PERSON');
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [department, setDepartment] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setErrorMessage('');
+
+  if (!email.trim() || !email.includes('@')) {
+    setErrorMessage('Please enter a valid email address.');
+    return;
+  }
+
+  if (!password) {
+    setErrorMessage('Please enter your password.');
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    await login(email.trim(), password);
+
+if (role !== selectedRole) {
+  throw new Error(`This account is not registered as ${selectedRole}.`);
+}
+    onSuccess();
+  } catch (error: any) {
+    setErrorMessage(
+      error.message || 'Login failed. Please check your credentials.'
+    );
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
+  return (
+    <div className="min-h-screen bg-slate-100 flex flex-col justify-center py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto w-full bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden grid grid-cols-1 md:grid-cols-12">
+        {/* Left Side: JKLU Accessibility System Info */}
+        <div className="md:col-span-6 bg-slate-900 text-white p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
+          {/* Subtle decorative background pattern */}
+          <div className="absolute inset-0 opacity-5 pointer-events-none">
+            <div className="absolute -right-12 -top-12 w-64 h-64 border-8 border-white rounded-full" />
+            <div className="absolute -left-12 -bottom-12 w-72 h-72 border-8 border-white rounded-full" />
+          </div>
+
+          <div className="relative z-10">
+            <div className="flex items-center gap-3.5 mb-6">
+              <JKLULogo size="lg" />
+              <div>
+                
+                <h1 className="text-xl font-bold text-white tracking-tight">
+                  JK Lakshmipat University
+                </h1>
+              </div>
+            </div>
+
+            <h2 className="text-2xl font-bold tracking-tight text-white mb-3">
+              JKLUSugam
+            </h2>
+            <p className="text-sm text-slate-300 leading-relaxed mb-6">
+              Smart Unified Gateway for Accessible Mobility
+            </p>
+
+            <div className="space-y-3 pt-2 text-xs text-slate-300">
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <span>
+                  <strong>Full Issue Lifecycle:</strong> From student barrier report to maintenance dispatch and administrative resolution verification.
+                </span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <span>
+                  <strong>Traceable Audit History:</strong> Complete transparency with logged status transitions and repair remarks.
+                </span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <span>
+                  <strong>29 Campus Locations:</strong> Complete coverage across academic blocks, LRC, hostels, grounds, and parking zones.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative z-10 pt-8 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+            <div className="flex items-center gap-2">
+              <Building2 className="w-4 h-4 text-blue-400" />
+              <span>JK Lakshmipat University</span>
+            </div>
+            <span className="font-mono text-slate-500">@jklu.edu.in</span>
+          </div>
+        </div>
+
+        {/* Right Side: Login Form */}
+        <div className="md:col-span-6 p-8 sm:p-10 flex flex-col justify-between bg-white">
+          <div>
+            <div className="mb-6">
+              <h3 className="text-xl font-bold text-slate-900">Sign in to Portal</h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Enter your institutional @jklu.edu.in credentials to access your account.
+              </p>
+            </div>
+
+            {errorMessage && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg">
+                {errorMessage}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+             
+
+              {/* Full Name (Optional) */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Full Name (Optional)
+                </label>
+                <input
+                  id="login-name"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="e.g. Your Full Name"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 font-medium"
+                />
+              </div>
+
+              {/* Institutional Email */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Institutional Email (@jklu.edu.in) <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                  <input
+                    id="login-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    placeholder="yourname@jklu.edu.in"
+                    className="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 font-medium"
+                  />
+                </div>
+              </div>
+
+              {/* Password */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Password <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                  <input
+                    id="login-password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    placeholder="Enter your password"
+                    className="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 font-medium"
+                  />
+                </div>
+              </div>
+
+              {/* Department (Optional) */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Department / Branch (Optional)
+                </label>
+                <input
+                  id="login-department"
+                  type="text"
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  placeholder={
+                    selectedRole === 'PERSON'
+                      ? 'e.g. Computer Science & Engineering'
+                      : selectedRole === 'STAFF'
+                      ? 'e.g. Maintenance / Electrical'
+                      : 'e.g. Administration'
+                  }
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 font-medium"
+                />
+              </div>
+
+              <button
+                id="login-submit-button"
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2 mt-2"
+              >
+                <span>{isSubmitting ? 'Authenticating...' : 'Sign In'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </form>
+          </div>
+
+          <p className="text-[11px] text-slate-400 text-center mt-6">
+            JK Lakshmipat University • Campus Accessibility Infrastructure System
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
