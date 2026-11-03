@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Flame Gradient: deep orange to warm yellow-gold -->
+    <linearGradient id="flameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#e65100" />
+      <stop offset="45%" stop-color="#f57c00" />
+      <stop offset="80%" stop-color="#fb8c00" />
+      <stop offset="100%" stop-color="#ffa726" />
+    </linearGradient>
+
+    <!-- Flame Highlight -->
+    <linearGradient id="flameInner" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ffb74d" stop-opacity="0.2" />
+      <stop offset="60%" stop-color="#ffe082" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#fff9c4" stop-opacity="0.9" />
+    </linearGradient>
+
+    <!-- Lotus Outer Petals: Bright Cyan/Azure to Royal Blue -->
+    <linearGradient id="lotusOuter" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#29b6f6" />
+      <stop offset="50%" stop-color="#0288d1" />
+      <stop offset="100%" stop-color="#01579b" />
+    </linearGradient>
+
+    <!-- Lotus Inner Petals -->
+    <linearGradient id="lotusInner" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4fc3f7" />
+      <stop offset="100%" stop-color="#0277bd" />
+    </linearGradient>
+
+    <!-- Text Path for Arched University Title -->
+    <!-- Arc from left (~160 deg) across the top to right (~20 deg) centered at (250, 245) with radius 180 -->
+    <path id="textArc" d="M 65,245 A 185,185 0 0,1 435,245" fill="none" />
+  </defs>
+
+  <!-- Clean Background -->
+  <rect width="500" height="500" fill="#ffffff" />
+
+  <!-- Arched Text: JK LAKSHMIPAT UNIVERSITY -->
+  <text fill="#111111" font-family="'Times New Roman', 'Liberation Serif', 'FreeSerif', 'Georgia', serif" font-size="24.5" font-weight="bold" letter-spacing="4.5">
+    <textPath href="#textArc" startOffset="50%" text-anchor="middle">
+      JK LAKSHMIPAT UNIVERSITY
+    </textPath>
+  </text>
+
+  <!-- Central Emblem Group -->
+  <g transform="translate(0, 0)">
+    <!-- THE FLAME -->
+    <!-- Stylized rising flame with curve tip -->
+    <path d="M 250,118 
+             C 255,145 264,165 277,185 
+             C 292,207 296,226 288,245 
+             C 281,260 268,268 250,268 
+             C 232,268 219,260 212,245 
+             C 204,226 208,207 223,185 
+             C 236,165 245,145 250,118 Z" 
+          fill="url(#flameGrad)" />
+
+    <!-- Inner Flame Highlight -->
+    <path d="M 250,140 
+             C 253,160 259,175 267,192 
+             C 275,208 277,222 272,236 
+             C 267,247 259,252 250,252 
+             C 241,252 233,247 228,236 
+             C 223,222 225,208 233,192 
+             C 241,175 247,160 250,140 Z" 
+          fill="url(#flameInner)" />
+
+    <!-- THE LOTUS FLOWER -->
+    <!-- Lower Central Base Petal -->
+    <path d="M 250,296 
+             C 225,296 205,282 195,268 
+             C 215,274 235,276 250,276 
+             C 265,276 285,274 305,268 
+             C 295,282 275,296 250,296 Z" 
+          fill="#01579b" />
+
+    <!-- Left Wing Wide Bottom Petal -->
+    <path d="M 125,260 
+             C 155,252 185,256 210,268 
+             C 185,278 155,284 135,280 
+             C 120,276 118,264 125,260 Z" 
+          fill="url(#lotusOuter)" />
+
+    <!-- Right Wing Wide Bottom Petal -->
+    <path d="M 375,260 
+             C 345,252 315,256 290,268 
+             C 315,278 345,284 365,280 
+             C 380,276 382,264 375,260 Z" 
+          fill="url(#lotusOuter)" />
+
+    <!-- Left Main Lower Petal (sweeping out and up) -->
+    <path d="M 160,212 
+             C 180,228 205,245 235,252 
+             C 205,255 175,250 148,236 
+             C 142,228 148,218 160,212 Z" 
+          fill="url(#lotusInner)" />
+
+    <!-- Right Main Lower Petal (sweeping out and up) -->
+    <path d="M 340,212 
+             C 320,228 295,245 265,252 
+             C 295,255 325,250 352,236 
+             C 358,228 352,218 340,212 Z" 
+          fill="url(#lotusInner)" />
+
+    <!-- Left Inner Curved Petal (cupping the flame) -->
+    <path d="M 205,225 
+             C 220,236 235,248 245,262 
+             C 232,260 218,252 208,240 
+             C 202,234 202,228 205,225 Z" 
+          fill="#0288d1" />
+
+    <!-- Right Inner Curved Petal (cupping the flame) -->
+    <path d="M 295,225 
+             C 280,236 265,248 255,262 
+             C 268,260 282,252 292,240 
+             C 298,234 298,228 295,225 Z" 
+          fill="#0288d1" />
+  </g>
+
+  <!-- SANSKRIT MOTTO: ज्ञानम् अमृतम् -->
+  <text x="250" y="338" 
+        fill="#111111" 
+        font-family="'FreeSerif', 'Noto Serif Devanagari', 'Mangal', 'Lohit Devanagari', 'Arial Unicode MS', serif" 
+        font-size="28" 
+        font-weight="bold" 
+        text-anchor="middle" 
+        letter-spacing="2">
+    ज्ञानम् अमृतम्
+  </text>
+
+  <!-- ACRONYM: JKLU -->
+  <text x="250" y="445" 
+        fill="#111111" 
+        font-family="'Times New Roman', 'Liberation Serif', 'FreeSerif', 'Georgia', serif" 
+        font-size="94" 
+        font-weight="bold" 
+        letter-spacing="4" 
+        text-anchor="middle">
+    JKLU
+  </text>
+</svg>

@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Flame Gradient: deep orange base to glowing golden yellow -->
+    <linearGradient id="flameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ea580c" />
+      <stop offset="35%" stop-color="#f97316" />
+      <stop offset="70%" stop-color="#fb923c" />
+      <stop offset="100%" stop-color="#fde047" />
+    </linearGradient>
+
+    <!-- Flame Core Inner Glow -->
+    <linearGradient id="flameCore" x1="20%" y1="90%" x2="50%" y2="20%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85" />
+      <stop offset="45%" stop-color="#fef08a" stop-opacity="0.75" />
+      <stop offset="100%" stop-color="#f97316" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Lotus Petal Gradients -->
+    <linearGradient id="lotusOuterPetal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="40%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0369a1" />
+    </linearGradient>
+
+    <linearGradient id="lotusMidPetal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#075985" />
+    </linearGradient>
+
+    <linearGradient id="lotusInnerCradle" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0c4a6e" />
+    </linearGradient>
+
+    <!-- Arched Text Path for 'JK LAKSHMIPAT UNIVERSITY' -->
+    <!-- Arc from 50,250 over the top to 450,250 -->
+    <path id="jkluTextArc" d="M 52,248 A 198,198 0 0,1 448,248" fill="none" />
+  </defs>
+
+  <!-- Clean White Canvas -->
+  <rect width="500" height="500" fill="#ffffff" />
+
+  <!-- ARCHED UNIVERSITY TITLE -->
+  <text fill="#0f172a" 
+        font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', 'Georgia', serif" 
+        font-size="25" 
+        font-weight="bold" 
+        letter-spacing="4.2">
+    <textPath href="#jkluTextArc" startOffset="50%" text-anchor="middle">
+      JK LAKSHMIPAT UNIVERSITY
+    </textPath>
+  </text>
+
+  <!-- CENTRAL EMBLEM: FLAME & LOTUS -->
+  <g transform="translate(0, 5)">
+    <!-- 1. CENTRAL FLAME -->
+    <!-- Main Flame Body -->
+    <path d="M 250,112
+             C 256,138 266,162 278,182
+             C 292,204 296,222 289,240
+             C 282,256 268,266 250,266
+             C 232,266 218,256 211,240
+             C 204,222 208,204 222,182
+             C 234,162 244,138 250,112 Z"
+          fill="url(#flameGrad)" />
+
+    <!-- Flame Inner Light Highlight -->
+    <path d="M 248,135
+             C 252,154 260,172 268,188
+             C 276,204 278,218 274,232
+             C 270,244 260,252 248,252
+             C 240,252 234,247 229,238
+             C 225,226 226,212 233,196
+             C 239,178 244,158 248,135 Z"
+          fill="url(#flameCore)" />
+
+    <!-- 2. LOTUS FLOWER PETALS -->
+    <!-- Lower Base Center Petal (Dark Navy Blue) -->
+    <path d="M 250,296
+             C 224,296 202,282 192,266
+             C 214,273 234,276 250,276
+             C 266,276 286,273 308,266
+             C 298,282 276,296 250,296 Z"
+          fill="url(#lotusInnerCradle)" />
+
+    <!-- Far-Left Wing Petal (pointing outwards) -->
+    <path d="M 118,256
+             C 146,248 178,252 206,266
+             C 180,277 150,283 128,278
+             C 112,274 110,261 118,256 Z"
+          fill="url(#lotusOuterPetal)" />
+
+    <!-- Far-Right Wing Petal (pointing outwards) -->
+    <path d="M 382,256
+             C 354,248 322,252 294,266
+             C 320,277 350,283 372,278
+             C 388,274 390,261 382,256 Z"
+          fill="url(#lotusOuterPetal)" />
+
+    <!-- Mid-Left Petal (angled upward 45 degrees) -->
+    <path d="M 154,208
+             C 176,225 202,243 234,250
+             C 202,253 170,248 142,233
+             C 136,224 142,214 154,208 Z"
+          fill="url(#lotusMidPetal)" />
+
+    <!-- Mid-Right Petal (angled upward 45 degrees) -->
+    <path d="M 346,208
+             C 324,225 298,243 266,250
+             C 298,253 330,248 358,233
+             C 364,224 358,214 346,208 Z"
+          fill="url(#lotusMidPetal)" />
+
+    <!-- Inner-Left Cup Petal (cradling the flame) -->
+    <path d="M 204,222
+             C 220,234 235,247 244,262
+             C 231,260 216,251 206,238
+             C 200,231 201,225 204,222 Z"
+          fill="#0284c7" />
+
+    <!-- Inner-Right Cup Petal (cradling the flame) -->
+    <path d="M 296,222
+             C 280,234 265,247 256,262
+             C 269,260 284,251 294,238
+             C 300,231 299,225 296,222 Z"
+          fill="#0284c7" />
+  </g>
+
+  <!-- 3. SANSKRIT MOTTO: ज्ञानम् अमृतम् -->
+  <text x="250" y="344" 
+        fill="#0f172a" 
+        font-family="'FreeSerif', 'Noto Serif Devanagari', 'Mangal', 'Lohit Devanagari', 'Arial Unicode MS', serif" 
+        font-size="28" 
+        font-weight="bold" 
+        text-anchor="middle" 
+        letter-spacing="2">
+    ज्ञानम् अमृतम्
+  </text>
+
+  <!-- 4. UNIVERSITY INITIALS: JKLU -->
+  <text x="250" y="448" 
+        fill="#0f172a" 
+        font-family="'Times New Roman', 'Liberation Serif', 'Nimbus Roman', 'Georgia', serif" 
+        font-size="96" 
+        font-weight="bold" 
+        letter-spacing="4" 
+        text-anchor="middle">
+    JKLU
+  </text>
+</svg>
